@@ -1,0 +1,63 @@
+.container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #333333;
+}
+
+.modal {
+    width: 30%;
+    padding: 25px 10px;
+    background: #000;
+    border-radius: 8px;
+    &_title {
+        color: white;
+    }
+    &_username {
+        color: white;
+    }
+    &_text {
+        color: #c3c3c3;
+    }
+    .flex {
+        display: flex;
+    }
+    &_btn {
+        cursor: pointer;
+        padding: 8px 10px;
+        background: teal;
+        color: white;
+        border: none;
+        border-radius: 8px;
+    }
+    .create {
+        margin-left: 10px;
+    }
+    .flex-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    &_input {
+        width: 50%;
+        height: 30px;
+        margin-top: 15px;
+        border: none;
+        border-radius: 8px;
+    }
+    .btn-send {
+        width: 30%;
+        height: 30px;
+        margin-top: 15px;
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+        background: #4c4c4c;
+        color: white;
+    }
+}
