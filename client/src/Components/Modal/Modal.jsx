@@ -3,15 +3,53 @@ import './Modal.scss'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { changeModal, changeCreateStatus } from '../../redux/reducers/UIReducer'
-import { updateName, updateAge, updateDesc } from '../../redux/reducers/userReducer'
+import { updateName } from '../../redux/reducers/userReducer'
+import { addUser, deleteUser } from '../../redux/reducers/userList'
+import { useState } from 'react'
 
 const Modal = () => {
-    let inputChecked = false
+
+    const [form, setForm] = useState({
+        name: '',
+        age: null,
+        description: ''
+    })
 
     const dispatch = useDispatch()
     
-    const username = useSelector(state => state.user.name)
     const createStatus = useSelector(state => state.ui.createStatus)
+    const username = useSelector(state => state.user.name)
+
+    const userList = useSelector(state => state.userList.list)
+
+    const handleDeleteUser = (candidateId) => {
+        dispatch(deleteUser(candidateId))
+      }
+
+    const userCollection = userList.map(el => (
+        <div key={el.id}>
+            <p className='modal_text'>Name: {el.name}</p>
+            <p className='modal_text'>Age: {el.age}</p>
+            <p className='modal_text'>Description: {el.description}</p>
+            <button onClick={() => handleDeleteUser(el.id)} className='modal_btn delete'>Delete</button>
+      </div>
+    ))
+
+    const handleUpdateForm = (formType, formName) => { 
+        setForm({
+          ...form,
+          [formType]: formName
+        })
+      }
+      
+      const handleCreate = () => { 
+        dispatch(addUser(form.name, form.age, form.description))
+        setForm({
+          name: '',
+          age: null,
+          description: ''
+        })
+      }
 
     const handleClickModal = () => {
         dispatch(changeModal())
@@ -21,40 +59,9 @@ const Modal = () => {
         dispatch(changeCreateStatus())
     }
 
-    const userInf = {
-        name: '',
-        age: null,
-        desc: ''
-    }
-
     const handleChangeName = (value) => {
         dispatch(updateName(value))
-        userInf.name = value
-    }
-
-    const handleChangeAge = (value) => {
-        dispatch(updateAge(value))
-        userInf.age = value
-        // console.log(dispatch(updateAge(value)).payload)
-    }
-
-    const handleChangeDesc = (value) => {
-        dispatch(updateDesc(value))
-        userInf.desc = value
-    }
-
-    const checkInputs = () => {
-        inputChecked = true
-    }
-
-    const returnInf = () => {
-        return (
-            <div>
-                <p className='modal_text'>{userInf.name}</p>
-                <p className='modal_text'>{userInf.age}</p>
-                <p className='modal_text'>{userInf.desc}</p>
-            </div>
-        )
+        
     }
 
     return (
@@ -70,17 +77,10 @@ const Modal = () => {
                         {
                             handleChangeName(username)
                         }
-                        {
-                            username.length === 0 &&
-                            <input className='modal_input' type="text" placeholder='Your name' onChange={(e) => {handleChangeName(e.target.value)}} />
-                        }
-                        <input className='modal_input' type="text" placeholder='Your age' onChange={(e) => {handleChangeAge(e.target.value)}} />
-                        <input className='modal_input' type="text" placeholder='About you' onChange={(e) => {handleChangeDesc(e.target.value)}} />
-                        <button onClick={checkInputs} className='btn-send'>Send</button>
-                        {
-                            inputChecked &&
-                            returnInf
-                        }
+                        <input className='modal_input' type="text" placeholder='Your age' onChange={e => handleUpdateForm('age', e.target.value)}/>
+                        <input className='modal_input' type="text" placeholder='About you' onChange={e => handleUpdateForm('description', e.target.value)} />
+                        <button onClick={handleCreate} className='btn-send'>Send</button>
+                        {userCollection}
                     </div>
                 }
                 <div className='flex'>

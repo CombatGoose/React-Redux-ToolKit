@@ -12,9 +12,11 @@ const App = () => {
     const dispatch = useDispatch()
 
     const modalStatus = useSelector(state => state.ui.modalStatus)
+    console.log(modalStatus)
 
     const handleClickModal = () => {
         dispatch(changeModal())
+        console.log(modalStatus)
     }
 
     const handleChangeName = (value) => {
